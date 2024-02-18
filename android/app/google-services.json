@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "932865968183",
+    "project_id": "hnumhss",
+    "storage_bucket": "hnumhss.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:932865968183:android:9c093405b8526bacab17b2",
+        "android_client_info": {
+          "package_name": "com.example.mentalhealth_support_system"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDM1wy-yIbWRzCMPXkXao0kYAD88mnLwFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
