@@ -31,8 +31,8 @@ class AuthService extends ChangeNotifier {
   }
 
   //Create a new user
-  Future<UserCredential> signUpWithEmailandPassword(
-      String email, String password, String firstName, String lastName) async {
+  Future<UserCredential> signUpWithEmailandPassword(String email,
+      String password, String firstName, String lastName, String role) async {
     try {
       UserCredential userCredential = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
@@ -42,6 +42,7 @@ class AuthService extends ChangeNotifier {
         'email': email,
         'first name': firstName,
         'last name': lastName,
+        'role': role,
       });
 
       return userCredential;

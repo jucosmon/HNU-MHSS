@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:mentalhealth_support_system/services/auth/auth_service.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class CounselorHomePage extends StatefulWidget {
+  const CounselorHomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<CounselorHomePage> createState() => _CounselorHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _CounselorHomePageState extends State<CounselorHomePage> {
   //sign out
   void signOut() {
     //get auth service
@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home Page"),
+        title: const Text("Counselor"),
         backgroundColor: Colors.green,
         actions: [
           //sign out button

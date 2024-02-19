@@ -41,6 +41,7 @@ class _RegisterPageState extends State<RegisterPage> {
         passwordController.text.trim(),
         firstNameController.text.trim(),
         lastNameController.text.trim(),
+        'student',
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
