@@ -23,7 +23,8 @@ class _RegisterPageState extends State<RegisterPage> {
   //sign up user
 
   void signUp() async {
-    if (passwordController.text != confirmPasswordController.text) {
+    if (passwordController.text.trim() !=
+        confirmPasswordController.text.trim()) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Passwords do not match!"),
@@ -36,8 +37,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
     try {
       await authService.signUpWithEmailandPassword(
-        emailController.text,
-        passwordController.text,
+        emailController.text.trim(),
+        passwordController.text.trim(),
+        firstNameController.text.trim(),
+        lastNameController.text.trim(),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -65,21 +68,26 @@ class _RegisterPageState extends State<RegisterPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 50),
-                    //logo
-                    const Icon(
-                      Icons.message,
-                      size: 100,
-                    ),
-                    const SizedBox(height: 50),
 
                     //sign up  message
                     const Text(
                       "Create an account!",
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
+                      style: TextStyle(fontSize: 25),
                     ),
-                    const SizedBox(height: 25),
+                    const SizedBox(height: 35),
+
+                    //email textfield
+                    MyTextField(
+                        controller: firstNameController,
+                        hintText: "First Name",
+                        obscureText: false),
+                    const SizedBox(height: 10),
+
+                    MyTextField(
+                        controller: lastNameController,
+                        hintText: "Last Name",
+                        obscureText: false),
+                    const SizedBox(height: 10),
 
                     //email textfield
                     MyTextField(
@@ -107,7 +115,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     //sign in button
                     MyButton(onTap: signUp, text: "Sign Up"),
 
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 25),
 
                     //login in if already have an account
                     Row(
