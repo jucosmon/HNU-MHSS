@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mentalhealth_support_system/pages/student_home_page.dart';
 import 'package:mentalhealth_support_system/pages/counselor_home_page.dart';
+import 'package:mentalhealth_support_system/pages/student/student_home_page.dart';
 import 'package:mentalhealth_support_system/services/auth/login_or_register.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
