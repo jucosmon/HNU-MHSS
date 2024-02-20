@@ -33,16 +33,18 @@ class AuthGate extends StatelessWidget {
                     }
 
                     if (snapshot.connectionState == ConnectionState.done) {
-                      if (snapshot.data != null && snapshot.data!.exists) {
-                        Map<String, dynamic>? data =
-                            snapshot.data!.data() as Map<String, dynamic>?;
+                      if (snapshot.hasData && snapshot.data!.exists) {
+                        Map<String, dynamic> userData =
+                            snapshot.data!.data() as Map<String, dynamic>;
 
-                        if (data != null && data.containsKey('role')) {
-                          String userRole = data[
+                        if (userData.containsKey('role')) {
+                          String userRole = userData[
                               'role']; // Retrieve the user's role from Firestore
 
                           if (userRole == 'student') {
-                            return StudentHomePage(); // Navigate to the student homepage
+                            return StudentHomePage(
+                                userData:
+                                    userData); // Pass the user data to StudentHomePage
                           } else if (userRole == 'counselor') {
                             return CounselorHomePage(); // Navigate to the counselor homepage
                           }

@@ -1,45 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:mentalhealth_support_system/pages/student/emotionAnalysis.dart';
-import 'package:mentalhealth_support_system/services/auth/auth_service.dart';
-import 'package:provider/provider.dart';
+import 'package:mentalhealth_support_system/profile_page.dart';
 
 class StudentHomePage extends StatefulWidget {
-  const StudentHomePage({super.key});
+  final Map<String, dynamic> userData;
+
+  const StudentHomePage({required this.userData});
 
   @override
   State<StudentHomePage> createState() => _StudentHomePageState();
 }
 
 class _StudentHomePageState extends State<StudentHomePage> {
-  //sign out
-  void signOut() {
-    //get auth service
-    final authService = Provider.of<AuthService>(context, listen: false);
-
-    authService.signOut();
-  }
+  int _selectedIndex = 0; // Set the initial selected index to 2 (Profile)
 
   @override
   Widget build(BuildContext context) {
+    String firstName = widget.userData['first name'] ?? 'Default First Name';
+    String lastName = widget.userData['last name'] ?? 'Default Last Name';
     return Scaffold(
       appBar: AppBar(
         title: const Center(
           child: Text(
-            "HNU MentalHelp / BerryHelpFul",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            "HNU-MHSS",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 196, 225, 198)),
           ),
         ),
-        backgroundColor: Colors.deepPurple[400],
-        actions: [
-          //sign out button
-          IconButton(
-            onPressed: signOut,
-            icon: const Icon(Icons.logout),
-          )
-        ],
+        backgroundColor: Color.fromARGB(255, 34, 94, 50),
       ),
-      body: _buildBody(context),
-      backgroundColor: Colors.deepPurple[100],
+      body: _buildBody(context, firstName, lastName),
+      backgroundColor: const Color.fromARGB(255, 233, 232, 236),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
@@ -50,76 +42,68 @@ class _StudentHomePageState extends State<StudentHomePage> {
             icon: Icon(Icons.message),
             label: 'Appointments/Messages',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
         ],
-        backgroundColor: Colors.deepPurple[200],
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 47, 114, 71),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Color.fromARGB(255, 149, 192, 150),
+        currentIndex: _selectedIndex, // Set the current selected index
         onTap: (int index) {
           // Handle navigation based on the tapped index
           if (index == 0) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => EmotionAnalysis()),
+              MaterialPageRoute(builder: (context) => const EmotionAnalysis()),
             );
-          } else {
+          } else if (index == 1) {
             // Handle navigation for other items if needed
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProfilePage(userData: widget.userData)),
+            );
           }
         },
       ),
     );
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget _buildBody(BuildContext context, String firstName, String lastName) {
     return SafeArea(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
+          Container(
             padding:
                 EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.06),
-            child: Expanded(
-              child: Container(
-                width: double.infinity,
-                child: const Center(
-                  child: Text(
-                    "How are you feeling today?",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 30.0,
-                      color: Colors.black,
-                      fontFamily: 'Arial',
-                    ),
-                  ),
+            width: double.infinity,
+            child: const Center(
+              child: Text(
+                "How are you feeling today?",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 30.0,
+                  color: Colors.black,
+                  fontFamily: 'Arial',
                 ),
               ),
             ),
           ),
-          Padding(
-            padding:
-                EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
-            child: Expanded(
-              child: CircleAvatar(
-                radius: 70,
-                child: ClipOval(
-                  child: Container(
-                    height: MediaQuery.of(context).size.width / 2,
-                    width: MediaQuery.of(context).size.width / 2,
-                    child: Image.asset(
-                      'images/charess2.jpg',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          SizedBox(
+              height: MediaQuery.of(context).size.height *
+                  0.04), // Adjust the spacing as needed
+
           const SizedBox(height: 20),
-          const Center(
+          Center(
             child: Text(
-              "Jelah Grado",
+              "$firstName $lastName",
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 25.0,
                 color: Colors.black,
                 fontFamily: 'Arial',
