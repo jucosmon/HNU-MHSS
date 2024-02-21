@@ -1,19 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:mentalhealth_support_system/pages/student/apppointment.dart';
-import 'package:mentalhealth_support_system/pages/student/emotionAnalysis.dart';
 import 'package:mentalhealth_support_system/profile_page.dart';
+import 'package:mentalhealth_support_system/services/auth/auth_service.dart';
+import 'package:provider/provider.dart';
 
-class StudentHomePage extends StatefulWidget {
+class CounselorHomePage extends StatefulWidget {
   final Map<String, dynamic> userData;
 
-  const StudentHomePage({super.key, required this.userData});
+  const CounselorHomePage({required this.userData});
 
   @override
-  State<StudentHomePage> createState() => _StudentHomePageState();
+  State<CounselorHomePage> createState() => _CounselorHomePageState();
 }
 
-class _StudentHomePageState extends State<StudentHomePage> {
+class _CounselorHomePageState extends State<CounselorHomePage> {
   int _selectedIndex = 0; // Set the initial selected index to 2 (Profile)
+
+  //sign out
+  void signOut() {
+    //get auth service
+    final authService = Provider.of<AuthService>(context, listen: false);
+
+    authService.signOut();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,20 +63,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
         onTap: (int index) {
           // Handle navigation based on the tapped index
           if (index == 0) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => EmotionAnalysis(
-                        userData: widget.userData,
-                      )),
-            );
           } else if (index == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      MyAppointment(userData: widget.userData)),
-            );
             // Handle navigation for other items if needed
           } else {
             Navigator.push(
@@ -108,6 +103,9 @@ class _StudentHomePageState extends State<StudentHomePage> {
               height: MediaQuery.of(context).size.height *
                   0.04), // Adjust the spacing as needed
 
+          const SizedBox(height: 20),
+
+          const SizedBox(height: 20),
           const SizedBox(height: 20),
         ],
       ),

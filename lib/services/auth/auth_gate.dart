@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mentalhealth_support_system/pages/counselor_home_page.dart';
+import 'package:mentalhealth_support_system/pages/counselor/counselor_home_page.dart';
 import 'package:mentalhealth_support_system/pages/student/student_home_page.dart';
 import 'package:mentalhealth_support_system/services/auth/login_or_register.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -46,7 +46,9 @@ class AuthGate extends StatelessWidget {
                                 userData:
                                     userData); // Pass the user data to StudentHomePage
                           } else if (userRole == 'counselor') {
-                            return CounselorHomePage(); // Navigate to the counselor homepage
+                            return CounselorHomePage(
+                                userData:
+                                    userData); // Navigate to the counselor homepage
                           }
                         }
                       }

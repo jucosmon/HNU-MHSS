@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 class ProfilePage extends StatefulWidget {
   final Map<String, dynamic> userData;
 
-  const ProfilePage({required this.userData});
+  const ProfilePage({super.key, required this.userData});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -32,11 +32,11 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Failed'),
+          title: const Text('Failed'),
           content: Text(errorMessage),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
@@ -54,16 +54,17 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirm Account Deletion'),
+          title: const Text('Confirm Account Deletion'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('Please enter your password to confirm account deletion:'),
+              const Text(
+                  'Please enter your password to confirm account deletion:'),
               TextField(
                 controller: passwordController,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Enter your password',
                 ),
               ),
@@ -71,13 +72,13 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
             ),
             TextButton(
-              child: Text('Confirm'),
+              child: const Text('Confirm'),
               onPressed: () {
                 String enteredPassword = passwordController.text;
 
@@ -108,17 +109,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ],
                     );
-
-                    // Example: Navigator.pushReplacementNamed(context, '/login');
                   }).catchError((error) {
                     // Handle account deletion error
-                    // Example: showErrorMessage('Failed to delete account');
                     Navigator.of(context).pop();
                     showErrorMessageDialog(context, "Failed to delete account");
                   });
                 }).catchError((error) {
                   // Handle reauthentication error
-                  // Example: showErrorMessage('Incorrect password');
                   Navigator.of(context).pop();
                   showErrorMessageDialog(context, "Incorrect password");
                 });
@@ -182,12 +179,13 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ],
       ),
-      body: _buildBody(context, firstName, lastName),
+      body: _buildBody(context, firstName, lastName, email),
       backgroundColor: const Color.fromARGB(255, 233, 232, 236),
     );
   }
 
-  Widget _buildBody(BuildContext context, String firstName, String lastName) {
+  Widget _buildBody(
+      BuildContext context, String firstName, String lastName, String email) {
     return SafeArea(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -226,7 +224,18 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 5),
+          Center(
+            child: Text(
+              email,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 15.0,
+                color: Colors.black,
+                fontFamily: 'Arial',
+              ),
+            ),
+          ),
           const SizedBox(height: 20),
         ],
       ),

@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:mentalhealth_support_system/pages/student/suggestion.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-void main() {
-  runApp(const EmotionAnalysis());
-}
-
 class EmotionAnalysis extends StatefulWidget {
-  const EmotionAnalysis({Key? key}) : super(key: key);
+  final Map<String, dynamic> userData;
+
+  const EmotionAnalysis({super.key, required this.userData});
 
   @override
   _EmotionAnalysisState createState() => _EmotionAnalysisState();
@@ -148,7 +146,10 @@ class _EmotionAnalysisState extends State<EmotionAnalysis> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SuggestionPage(emotion: highestEmotion),
+        builder: (context) => SuggestionPage(
+          emotion: highestEmotion,
+          userData: widget.userData,
+        ),
       ),
     );
   }

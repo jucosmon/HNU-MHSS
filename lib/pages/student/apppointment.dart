@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
+class MyAppointment extends StatelessWidget {
+  final Map<String, dynamic> userData;
 
-class MyApp extends StatelessWidget {
+  const MyAppointment({super.key, required this.userData});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AppointmentScheduling(),
+      home: AppointmentScheduling(
+        userData: userData,
+      ),
     );
   }
 }
 
 class AppointmentScheduling extends StatefulWidget {
+  final Map<String, dynamic> userData;
+
+  const AppointmentScheduling({super.key, required this.userData});
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -54,23 +58,42 @@ class _MyHomePageState extends State<AppointmentScheduling> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Appointment',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            )),
+        backgroundColor: Colors.deepPurple[400],
+        /*leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => StudentHomePage(,),
+              ),
+            );
+          },
+        ), */
+      ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+        child: ListView(
+          padding: const EdgeInsets.all(16),
           children: [
-            const SizedBox(height: 200),
+            const SizedBox(height: 50),
             const Text(
               'Appointment Scheduling',
-              style: TextStyle(fontSize: 40, fontStyle: FontStyle.italic),
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 100),
+            const SizedBox(height: 50),
             Container(
               decoration: BoxDecoration(
                 color: Colors.deepPurple[400],
-                borderRadius:
-                    BorderRadius.circular(20), // Adjust the radius as needed
+                borderRadius: BorderRadius.circular(20),
               ),
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               height: 75,
               child: Text(
                 'Selected Date: ${selectedDate.toLocal()}',
@@ -83,18 +106,19 @@ class _MyHomePageState extends State<AppointmentScheduling> {
               onPressed: () => _selectDate(context),
               child: const Text('Select Date'),
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 60),
             Container(
               decoration: BoxDecoration(
                 color: Colors.deepPurple[400],
-                borderRadius:
-                    BorderRadius.circular(20), // Adjust the radius as needed
+                borderRadius: BorderRadius.circular(20),
               ),
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               height: 75,
-              child: Text('Selected Time: ${selectedTime.format(context)}',
-                  style: const TextStyle(fontSize: 20),
-                  textAlign: TextAlign.center),
+              child: Text(
+                'Selected Time: ${selectedTime.format(context)}',
+                style: const TextStyle(fontSize: 20),
+                textAlign: TextAlign.center,
+              ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(

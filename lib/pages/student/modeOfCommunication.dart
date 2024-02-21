@@ -1,47 +1,57 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const ModeOfCommunication());
-}
-
 const double sizedBoxHeight = 50;
-const double buttonMinWidth = 300.0; // Define minimum width for all buttons
-const double buttonPadding = 20.0; // Define button padding
-BorderRadius buttonBorderRadius =
-    BorderRadius.circular(10.0); // Define border radius
+const double buttonMinWidth = 300.0;
+const double buttonPadding = 20.0;
+BorderRadius buttonBorderRadius = BorderRadius.circular(10.0);
 
-Widget createGreenBox(String text, VoidCallback onTap) {
+Widget buttonModeOfCommunication(String text, VoidCallback onTap) {
   return InkWell(
-    onTap: onTap,
+    onTap: onTap, // I want this to navigate to "MyHomePage"
     child: Container(
-      constraints:
-          const BoxConstraints(minWidth: buttonMinWidth), // Set minimum width
+      width: buttonMinWidth,
       padding: const EdgeInsets.all(buttonPadding),
       decoration: BoxDecoration(
-        color: Colors.green,
+        color: Colors.deepPurple[200],
         borderRadius: buttonBorderRadius,
       ),
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontSize: 20.0,
-          color: Colors.black,
-          fontFamily: 'Arial',
+      child: Center(
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontFamily: 'Arial',
+          ),
+          textAlign: TextAlign.center,
         ),
-        textAlign: TextAlign.center, // Center text vertically
       ),
     ),
   );
 }
 
 class ModeOfCommunication extends StatelessWidget {
-  const ModeOfCommunication({super.key});
+  const ModeOfCommunication({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Talking Stage',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              )),
+          backgroundColor: Colors.deepPurple[400],
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
         body: Center(
           child: SafeArea(
             child: Column(
@@ -49,9 +59,9 @@ class ModeOfCommunication extends StatelessWidget {
               children: [
                 const SizedBox(height: 100),
                 const Text(
-                  '// In what way do you want to share your feelings?',
+                  'In what way do you want to share your feelings?',
                   style: TextStyle(
-                    fontSize: 30.0,
+                    fontSize: 25.0,
                     color: Colors.black,
                     fontFamily: 'Arial',
                   ),
@@ -59,14 +69,45 @@ class ModeOfCommunication extends StatelessWidget {
                 ),
                 const SizedBox(height: 70),
                 Column(
-                  // Use a Column to align buttons vertically
                   children: [
-                    createGreenBox('Message', () {
-                      // Handle button press
-                    }),
+                    InkWell(
+                      onTap: () {
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => MESSAGE NGA PAGE(),
+                        //   ),
+                        // );
+                      },
+                      child: Container(
+                        width: buttonMinWidth,
+                        padding: const EdgeInsets.all(buttonPadding),
+                        decoration: BoxDecoration(
+                          color: Colors.deepPurple[200],
+                          borderRadius: buttonBorderRadius,
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Message',
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontFamily: 'Arial',
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: sizedBoxHeight),
-                    createGreenBox('Call', () {
-                      // Handle button press
+                    buttonModeOfCommunication('Call', () {
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => APPOINTMENT PAGE(),
+                      //   ),
+                      // );
                     }),
                   ],
                 ),
