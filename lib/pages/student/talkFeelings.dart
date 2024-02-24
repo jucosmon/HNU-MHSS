@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mentalhealth_support_system/pages/student/modeOfCommunication.dart';
 import 'package:mentalhealth_support_system/pages/student/student_home_page.dart';
 
@@ -14,17 +15,16 @@ Widget buttonTalkFeelings(String text, VoidCallback onTap) {
       width: buttonMinWidth,
       padding: const EdgeInsets.all(buttonPadding),
       decoration: BoxDecoration(
-        color: Colors.deepPurple[200],
+        color: Colors.green[200],
         borderRadius: buttonBorderRadius,
       ),
       child: Center(
         child: Text(
           text,
-          style: const TextStyle(
+          style: GoogleFonts.poppins(
             fontSize: 20.0,
             fontWeight: FontWeight.bold,
             color: Colors.black,
-            fontFamily: 'Arial',
           ),
           textAlign: TextAlign.center,
         ),
@@ -48,28 +48,39 @@ class TalkFeelings extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               )),
-          backgroundColor: Colors.deepPurple[400],
+          backgroundColor: Colors.green[400],
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
             },
           ),
+          actions: [
+            // Three-dots icon
+            IconButton(
+              icon: const Icon(Icons.more_vert),
+              onPressed: () {
+                showPopupMenu(context);
+              },
+            ),
+          ],
         ),
         body: Center(
           child: SafeArea(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const SizedBox(height: 100),
-                const Text(
-                  'Do you want to talk with someone about your feelings?',
-                  style: TextStyle(
-                    fontSize: 25.0,
-                    color: Colors.black,
-                    fontFamily: 'Arial',
+                const SizedBox(height: 60),
+                SizedBox(
+                  width: 300,
+                  child: Text(
+                    'Do you want to talk with someone about your feelings?',
+                    style: GoogleFonts.poppins(
+                      fontSize: 25.0,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 70),
                 Column(
@@ -79,7 +90,8 @@ class TalkFeelings extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ModeOfCommunication(),
+                            builder: (context) =>
+                                ModeOfCommunication(userData: userData),
                           ),
                         );
                       },
@@ -87,17 +99,16 @@ class TalkFeelings extends StatelessWidget {
                         width: buttonMinWidth,
                         padding: const EdgeInsets.all(buttonPadding),
                         decoration: BoxDecoration(
-                          color: Colors.deepPurple[200],
+                          color: Colors.green[200],
                           borderRadius: buttonBorderRadius,
                         ),
-                        child: const Center(
+                        child: Center(
                           child: Text(
                             'Yes',
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
-                              fontFamily: 'Arial',
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -109,9 +120,8 @@ class TalkFeelings extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => StudentHomePage(
-                            userData: userData,
-                          ),
+                          builder: (context) =>
+                              StudentHomePage(userData: userData),
                         ),
                       );
                     }),
@@ -121,8 +131,31 @@ class TalkFeelings extends StatelessWidget {
             ),
           ),
         ),
-        backgroundColor: Colors.deepPurple[100],
+        backgroundColor: Colors.green[100],
       ),
+    );
+  }
+
+  void showPopupMenu(BuildContext context) {
+    // Show the popup menu
+    showMenu(
+      context: context,
+      position: const RelativeRect.fromLTRB(400, 100, 100, 0),
+      items: [
+        const PopupMenuItem(
+          child: Text('Home'),
+          // Add your action for Option 1 here
+        ),
+        const PopupMenuItem(
+          child: Text('Profile'),
+          // Add your action for Option 1 here
+        ),
+        const PopupMenuItem(
+          child: Text('Appointments'),
+          // Add your action for Option 2 here
+        ),
+        // Add more options as needed
+      ],
     );
   }
 }

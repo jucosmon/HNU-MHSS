@@ -20,10 +20,10 @@ class AppointmentScheduling extends StatefulWidget {
 
   const AppointmentScheduling({super.key, required this.userData});
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _StudentHomePage createState() => _StudentHomePage();
 }
 
-class _MyHomePageState extends State<AppointmentScheduling> {
+class _StudentHomePage extends State<AppointmentScheduling> {
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
 
@@ -59,23 +59,24 @@ class _MyHomePageState extends State<AppointmentScheduling> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Appointment',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            )),
-        backgroundColor: Colors.deepPurple[400],
-        /*leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => StudentHomePage(,),
-              ),
-            );
-          },
-        ), */
+        title: const Text(
+          'Appointment',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.green[400],
+        automaticallyImplyLeading: true,
+        actions: [
+          // Three-dots icon
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: () {
+              // Add three-dots icon here
+              showPopupMenu(context);
+            },
+          ),
+        ],
       ),
       body: Center(
         child: ListView(
@@ -90,45 +91,79 @@ class _MyHomePageState extends State<AppointmentScheduling> {
             const SizedBox(height: 50),
             Container(
               decoration: BoxDecoration(
-                color: Colors.deepPurple[400],
+                color: Colors.green[400],
                 borderRadius: BorderRadius.circular(20),
               ),
               padding: const EdgeInsets.all(20.0),
               height: 75,
               child: Text(
                 'Selected Date: ${selectedDate.toLocal()}',
-                style: const TextStyle(fontSize: 20),
+                style: const TextStyle(
+                    fontSize: 20, color: Colors.black), // Black font color
                 textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _selectDate(context),
-              child: const Text('Select Date'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green[200], // Background color
+              ),
+              child: const Text('Select Date',
+                  style: TextStyle(color: Colors.black)), // Black font color
             ),
             const SizedBox(height: 60),
             Container(
               decoration: BoxDecoration(
-                color: Colors.deepPurple[400],
+                color: Colors.green[400],
                 borderRadius: BorderRadius.circular(20),
               ),
               padding: const EdgeInsets.all(20.0),
               height: 75,
               child: Text(
                 'Selected Time: ${selectedTime.format(context)}',
-                style: const TextStyle(fontSize: 20),
+                style: const TextStyle(
+                    fontSize: 20, color: Colors.black), // Black font color
                 textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _selectTime(context),
-              child: const Text('Select Time'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green[200], // Background color
+              ),
+              child: const Text('Select Time',
+                  style: TextStyle(color: Colors.black)), // Black font color
             ),
           ],
         ),
       ),
-      backgroundColor: Colors.deepPurple[100],
+      backgroundColor: Colors.green[100],
+    );
+  }
+
+  // Add this method to show the popup menu
+  void showPopupMenu(BuildContext context) {
+    // Show a popup menu
+    showMenu(
+      context: context,
+      position: const RelativeRect.fromLTRB(1000.0, 80.0, 0.0, 0.0),
+      items: [
+        const PopupMenuItem(
+          child: Text('Home'),
+          // Add your action for Option 1 here
+        ),
+        const PopupMenuItem(
+          child: Text('Profile'),
+          // Add your action for Option 2 here
+        ),
+        const PopupMenuItem(
+          child: Text('Check in'),
+          // Add your action for Option 2 here
+        ),
+        // Add more options as needed
+      ],
     );
   }
 }

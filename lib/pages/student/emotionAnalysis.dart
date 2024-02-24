@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mentalhealth_support_system/pages/student/suggestion.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -36,17 +37,27 @@ class _EmotionAnalysisState extends State<EmotionAnalysis> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Emotion Tracker',
-              style: TextStyle(
+          title: Text('Emotion Tracker',
+              style: GoogleFonts.poppins(
                 fontWeight: FontWeight.bold,
               )),
-          backgroundColor: Colors.deepPurple[400],
+          backgroundColor: Colors.green[400],
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
             },
           ),
+          actions: [
+            // Three-dots icon
+            IconButton(
+              icon: const Icon(Icons.more_vert),
+              onPressed: () {
+                // Add three-dots icon here
+                showPopupMenu(context);
+              },
+            ),
+          ],
         ),
         body: SafeArea(
           child: Column(
@@ -54,21 +65,19 @@ class _EmotionAnalysisState extends State<EmotionAnalysis> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.02,
               ),
-              const SizedBox(
+              SizedBox(
                 width: double.infinity,
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Center(
                       child: Text(
                         "Swipe the color for each emotion",
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: GoogleFonts.poppins(
                           fontSize: 18.0,
                           color: Colors.black,
-                          fontFamily: 'Arial',
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -82,23 +91,22 @@ class _EmotionAnalysisState extends State<EmotionAnalysis> {
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
+                    SizedBox(
                       height: 30,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
+                          SizedBox(
                             width: 90,
                             child: Text(
                               '$emotion:',
-                              style: const TextStyle(
+                              style: GoogleFonts.poppins(
                                 fontSize: 13.0,
                                 color: Colors.black,
-                                fontFamily: 'Arial',
                               ),
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             width: 275,
                             child: Slider(
                               value: emotions[emotion]!,
@@ -117,7 +125,7 @@ class _EmotionAnalysisState extends State<EmotionAnalysis> {
                     ),
                   ],
                 ),
-              Container(
+              SizedBox(
                 height: MediaQuery.of(context).size.height * 0.4,
                 child: _buildCircularChart(),
               ),
@@ -128,13 +136,44 @@ class _EmotionAnalysisState extends State<EmotionAnalysis> {
                 onPressed: () {
                   _showResults();
                 },
-                child: Text('See Results'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green[300], // Background color
+                ),
+                child: const Text(
+                  'See Results',
+                  style: TextStyle(
+                    color: Colors.black, // Set font color to black
+                  ),
+                ),
               ),
             ],
           ),
         ),
-        backgroundColor: Colors.deepPurple[100],
+        backgroundColor: Colors.green[100],
       ),
+    );
+  }
+
+  void showPopupMenu(BuildContext context) {
+    // Show a popup menu
+    showMenu(
+      context: context,
+      position: const RelativeRect.fromLTRB(1000.0, 80.0, 0.0, 0.0),
+      items: [
+        const PopupMenuItem(
+          child: Text('Home'),
+          // Add your action for Option 1 here
+        ),
+        const PopupMenuItem(
+          child: Text('Profile'),
+          // Add your action for Option 1 here
+        ),
+        const PopupMenuItem(
+          child: Text('Appointments'),
+          // Add your action for Option 2 here
+        ),
+        // Add more options as needed
+      ],
     );
   }
 
@@ -160,7 +199,7 @@ class _EmotionAnalysisState extends State<EmotionAnalysis> {
             ChartData(entry.key, entry.value, emotionColors[entry.key]!))
         .toList();
 
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height / 2,
       child: SfCircularChart(
         series: <DoughnutSeries<ChartData, String>>[
@@ -170,7 +209,7 @@ class _EmotionAnalysisState extends State<EmotionAnalysis> {
             xValueMapper: (ChartData data, _) => data.emotion,
             yValueMapper: (ChartData data, _) => data.value,
             dataLabelMapper: (ChartData data, _) => '${data.value.round()}%',
-            dataLabelSettings: DataLabelSettings(isVisible: true),
+            dataLabelSettings: const DataLabelSettings(isVisible: true),
           ),
         ],
       ),

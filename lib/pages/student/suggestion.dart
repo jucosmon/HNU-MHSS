@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mentalhealth_support_system/pages/student/detailedSuggestion.dart';
 
 const double sizedBoxHeight = 50;
@@ -16,7 +17,7 @@ Widget createTheBox(BuildContext context, String text, String description,
         width: buttonMinWidth,
         padding: const EdgeInsets.all(buttonPadding),
         decoration: BoxDecoration(
-          color: Colors.deepPurple[200],
+          color: Colors.green[200],
           borderRadius: buttonBorderRadius,
         ),
         child: InkWell(
@@ -26,8 +27,7 @@ Widget createTheBox(BuildContext context, String text, String description,
               MaterialPageRoute(
                 builder: (context) => DetailedSuggestionPage(
                   description: description,
-                  emotion: emotion, // th
-                  userData: userData,
+                  emotion: emotion, userData: userData, // this errors
                 ),
               ),
             );
@@ -36,11 +36,10 @@ Widget createTheBox(BuildContext context, String text, String description,
             children: [
               Text(
                 text,
-                style: const TextStyle(
+                style: GoogleFonts.poppins(
                   fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
+                  // fontWeight: FontWeight.bold,
                   color: Colors.black,
-                  fontFamily: 'Arial',
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -65,8 +64,7 @@ class SuggestionPage extends StatefulWidget {
   final Map<String, dynamic> userData;
 
   const SuggestionPage(
-      {Key? key, required this.emotion, required this.userData})
-      : super(key: key);
+      {super.key, required this.emotion, required this.userData});
 
   @override
   State<SuggestionPage> createState() => _SuggestionPageState();
@@ -78,25 +76,43 @@ class _SuggestionPageState extends State<SuggestionPage> {
     List<Suggestion> suggestions = getSuggestions(widget.emotion);
 
     return Scaffold(
+      backgroundColor: Colors.green[100],
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Suggestions',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.deepPurple[400],
+        backgroundColor: Colors.green[400],
+        actions: [
+          // Three-dots icon
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: () {
+              // Add three-dots icon here
+              showPopupMenu(context);
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const SizedBox(
-              height: 60,
+              height: 30,
             ),
-            Text(
-              'Suggestions for ${widget.emotion}:',
-              style: const TextStyle(fontSize: 25),
+            SizedBox(
+              width: 400,
+              child: Center(
+                child: Text(
+                  'If you are feeling ${widget.emotion}:',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                      fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+              ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 30),
             Column(
               children: suggestions
                   .map(
@@ -110,6 +126,29 @@ class _SuggestionPageState extends State<SuggestionPage> {
           ],
         ),
       ),
+    );
+  }
+
+  void showPopupMenu(BuildContext context) {
+    // Show a popup menu
+    showMenu(
+      context: context,
+      position: const RelativeRect.fromLTRB(1000.0, 80.0, 0.0, 0.0),
+      items: [
+        const PopupMenuItem(
+          child: Text('Home'),
+          // Add your action for Option 1 here
+        ),
+        const PopupMenuItem(
+          child: Text('Profile'),
+          // Add your action for Option 1 here
+        ),
+        const PopupMenuItem(
+          child: Text('Appointments'),
+          // Add your action for Option 2 here
+        ),
+        // Add more options as needed
+      ],
     );
   }
 }
