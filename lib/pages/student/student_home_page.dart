@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mentalhealth_support_system/pages/display_appointments.dart';
 import 'package:mentalhealth_support_system/pages/display_messages.dart';
 import 'package:mentalhealth_support_system/pages/profile_page.dart';
@@ -50,12 +51,7 @@ class StudentHomePage extends StatelessWidget {
         currentIndex: 0,
         onTap: (int index) {
           if (index == 0) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => EmotionAnalysis(userData: userData),
-              ),
-            );
+            Navigator.popUntil(context, ModalRoute.withName('/'));
           } else if (index == 1) {
             Navigator.push(
               context,
@@ -121,10 +117,10 @@ class StudentHomePage extends StatelessWidget {
           Text(
             "How are you feeling today, $firstName?",
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 20.0,
               color: Colors.black,
-              fontFamily: 'Arial',
+              fontFamily: GoogleFonts.poppins().fontFamily,
             ),
           ),
         ],

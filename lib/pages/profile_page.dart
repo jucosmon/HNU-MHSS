@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mentalhealth_support_system/main.dart';
 import 'package:mentalhealth_support_system/services/auth/auth_service.dart';
 import 'package:provider/provider.dart';
@@ -215,11 +216,10 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Text(
               "$firstName $lastName",
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 25.0,
-                color: Colors.black,
-                fontFamily: 'Arial',
-              ),
+              style: TextStyle(
+                  fontSize: 25.0,
+                  color: Colors.black,
+                  fontFamily: GoogleFonts.poppins().fontFamily),
             ),
           ),
           const SizedBox(height: 5),
@@ -227,11 +227,10 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Text(
               email,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 15.0,
-                color: Colors.black,
-                fontFamily: 'Arial',
-              ),
+              style: TextStyle(
+                  fontSize: 15.0,
+                  color: Colors.black,
+                  fontFamily: GoogleFonts.poppins().fontFamily),
             ),
           ),
           const SizedBox(height: 20),
