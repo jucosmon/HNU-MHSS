@@ -1,22 +1,5 @@
 import 'package:flutter/material.dart';
-
-class MyAppointment extends StatelessWidget {
-  final String counselorId;
-  final Map<String, dynamic> userData;
-
-  const MyAppointment(
-      {super.key, required this.userData, required this.counselorId});
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: AppointmentScheduling(
-        userData: userData,
-        counselorId: counselorId,
-      ),
-    );
-  }
-}
+import 'package:mentalhealth_support_system/pages/display_appointments.dart';
 
 class AppointmentScheduling extends StatefulWidget {
   final String counselorId;
@@ -24,13 +7,17 @@ class AppointmentScheduling extends StatefulWidget {
 
   const AppointmentScheduling(
       {super.key, required this.userData, required this.counselorId});
+
   @override
-  _StudentHomePage createState() => _StudentHomePage();
+  _AppointmentSchedulingState createState() => _AppointmentSchedulingState();
 }
 
-class _StudentHomePage extends State<AppointmentScheduling> {
+class _AppointmentSchedulingState extends State<AppointmentScheduling> {
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
+  final TextEditingController _notesController = TextEditingController();
+  bool dateSelected = false;
+  bool timeSelected = false;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -38,11 +25,19 @@ class _StudentHomePage extends State<AppointmentScheduling> {
       initialDate: selectedDate,
       firstDate: DateTime.now(),
       lastDate: DateTime(2101),
+      /*
+      selectableDayPredicate: (DateTime date) {
+        // Allow selection of weekdays (Monday to Friday)
+        return date.weekday >= DateTime.monday &&
+            date.weekday <= DateTime.friday;
+      },
+      */
     );
 
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
+        dateSelected = true;
       });
     }
   }
@@ -53,11 +48,29 @@ class _StudentHomePage extends State<AppointmentScheduling> {
       initialTime: selectedTime,
     );
 
-    if (picked != null && picked != selectedTime) {
-      setState(() {
-        selectedTime = picked;
-      });
+    if (picked != null) {
+      // Validate time to be between 1 pm to 5 pm
+      if (picked.hour >= 13 && picked.hour <= 17) {
+        setState(() {
+          selectedTime = picked;
+          timeSelected = true; // Set timeSelected to true
+        });
+      } else {
+        // Show an error message for invalid time selection
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please select a time between 1 pm to 5 pm'),
+          ),
+        );
+      }
     }
+  }
+
+  void _submitAppointment() {
+    // Add logic to submit the appointment request with selectedDate, selectedTime, and _notesController.text
+    // For example, you can send this information to the backend for further processing
+    print('Appointment Confirmed');
+    Navigator.popUntil(context, (route) => route.isFirst);
   }
 
   @override
@@ -65,109 +78,116 @@ class _StudentHomePage extends State<AppointmentScheduling> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Appointment',
+          'Appointment with Counselor 1',
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
         ),
         backgroundColor: Colors.green[400],
-        actions: [
-          // Three-dots icon
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {
-              // Add three-dots icon here
-              showPopupMenu(context);
-            },
-          ),
-        ],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.popUntil(context, ModalRoute.withName('/'));
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    RecentAppointmentScreen(userData: widget.userData),
+              ),
+            );
+          },
+        ),
       ),
       body: Center(
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            const SizedBox(height: 50),
-            const Text(
-              'Appointment Scheduling',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Text(
+                  'Select Date:',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => _selectDate(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green[400],
+                    padding: const EdgeInsets.all(15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                      dateSelected
+                          ? 'Selected Date: ${selectedDate.toLocal().toString().split(' ')[0]}'
+                          : 'Choose Date',
+                      style:
+                          const TextStyle(color: Colors.white, fontSize: 20)),
+                ),
+                const SizedBox(height: 30),
+                const Text(
+                  'Select Time:',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => _selectTime(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green[400],
+                    padding: const EdgeInsets.all(15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                      timeSelected
+                          ? 'Selected Time: ${selectedTime.format(context)}'
+                          : 'Choose Time',
+                      style:
+                          const TextStyle(color: Colors.white, fontSize: 20)),
+                ),
+                const SizedBox(height: 30),
+                const Text(
+                  'Additional Details:',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: _notesController,
+                  maxLines: 3,
+                  decoration: InputDecoration(
+                    hintText:
+                        'Enter any specific requirements or topics to discuss',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _submitAppointment,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green[400],
+                    padding: const EdgeInsets.all(15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text('Confirm Appointment',
+                      style: TextStyle(color: Colors.white)),
+                ),
+              ],
             ),
-            const SizedBox(height: 50),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.green[400],
-                borderRadius: BorderRadius.circular(20),
-              ),
-              padding: const EdgeInsets.all(20.0),
-              height: 75,
-              child: Text(
-                'Selected Date: ${selectedDate.toLocal()}',
-                style: const TextStyle(
-                    fontSize: 20, color: Colors.black), // Black font color
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => _selectDate(context),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green[200], // Background color
-              ),
-              child: const Text('Select Date',
-                  style: TextStyle(color: Colors.black)), // Black font color
-            ),
-            const SizedBox(height: 60),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.green[400],
-                borderRadius: BorderRadius.circular(20),
-              ),
-              padding: const EdgeInsets.all(20.0),
-              height: 75,
-              child: Text(
-                'Selected Time: ${selectedTime.format(context)}',
-                style: const TextStyle(
-                    fontSize: 20, color: Colors.black), // Black font color
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => _selectTime(context),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green[200], // Background color
-              ),
-              child: const Text('Select Time',
-                  style: TextStyle(color: Colors.black)), // Black font color
-            ),
-          ],
+          ),
         ),
       ),
-      backgroundColor: Colors.green[100],
-    );
-  }
-
-  // Add this method to show the popup menu
-  void showPopupMenu(BuildContext context) {
-    // Show a popup menu
-    showMenu(
-      context: context,
-      position: const RelativeRect.fromLTRB(1000.0, 80.0, 0.0, 0.0),
-      items: [
-        const PopupMenuItem(
-          child: Text('Home'),
-          // Add your action for Option 1 here
-        ),
-        const PopupMenuItem(
-          child: Text('Profile'),
-          // Add your action for Option 2 here
-        ),
-        const PopupMenuItem(
-          child: Text('Check in'),
-          // Add your action for Option 2 here
-        ),
-        // Add more options as needed
-      ],
+      backgroundColor: const Color.fromARGB(255, 212, 226, 212),
     );
   }
 }

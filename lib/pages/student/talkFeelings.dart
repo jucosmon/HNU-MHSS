@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mentalhealth_support_system/pages/student/modeOfCommunication.dart';
-import 'package:mentalhealth_support_system/pages/student/student_home_page.dart';
 
 const double sizedBoxHeight = 50;
 const double buttonMinWidth = 300.0;
@@ -9,24 +8,35 @@ const double buttonPadding = 20.0;
 BorderRadius buttonBorderRadius = BorderRadius.circular(10.0);
 
 Widget buttonTalkFeelings(String text, VoidCallback onTap) {
-  return InkWell(
-    onTap: onTap, // I want this to navigate to "MyHomePage"
-    child: Container(
-      width: buttonMinWidth,
-      padding: const EdgeInsets.all(buttonPadding),
-      decoration: BoxDecoration(
-        color: Colors.green[200],
-        borderRadius: buttonBorderRadius,
-      ),
-      child: Center(
-        child: Text(
-          text,
-          style: GoogleFonts.poppins(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
+  return Material(
+    color: Colors.transparent,
+    child: InkWell(
+      onTap: onTap,
+      child: Container(
+        width: buttonMinWidth,
+        padding: const EdgeInsets.all(buttonPadding),
+        decoration: BoxDecoration(
+          color: Colors.green[500],
+          borderRadius: buttonBorderRadius,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.8),
+              spreadRadius: 2,
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: GoogleFonts.poppins(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+            textAlign: TextAlign.center,
           ),
-          textAlign: TextAlign.center,
         ),
       ),
     ),
@@ -99,8 +109,16 @@ class TalkFeelings extends StatelessWidget {
                         width: buttonMinWidth,
                         padding: const EdgeInsets.all(buttonPadding),
                         decoration: BoxDecoration(
-                          color: Colors.green[200],
+                          color: Colors.green[500],
                           borderRadius: buttonBorderRadius,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.8),
+                              spreadRadius: 2,
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
                         child: Center(
                           child: Text(
@@ -117,13 +135,7 @@ class TalkFeelings extends StatelessWidget {
                     ),
                     const SizedBox(height: sizedBoxHeight),
                     buttonTalkFeelings('No', () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              StudentHomePage(userData: userData),
-                        ),
-                      );
+                      Navigator.popUntil(context, (route) => route.isFirst);
                     }),
                   ],
                 ),
@@ -131,7 +143,6 @@ class TalkFeelings extends StatelessWidget {
             ),
           ),
         ),
-        backgroundColor: Colors.green[100],
       ),
     );
   }

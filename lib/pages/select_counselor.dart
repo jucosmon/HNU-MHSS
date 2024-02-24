@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mentalhealth_support_system/pages/open_message.dart';
 import 'package:mentalhealth_support_system/pages/student/apppointment.dart';
 
 class CounselorSelectionWidget extends StatelessWidget {
@@ -74,12 +75,14 @@ class CounselorSelectionWidget extends StatelessWidget {
                   );
                 } else {
                   // Navigate to open a message page
-                  /*
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => OpenMessagePage(userData: userData)),
-                );
-                */
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => OpenMessagePage(
+                              userData: userData,
+                              counselorId: 'counselorId',
+                            )),
+                  );
                 }
               },
             ),

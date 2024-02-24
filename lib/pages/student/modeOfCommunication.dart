@@ -14,8 +14,16 @@ Widget buttonModeOfCommunication(String text, VoidCallback onTap) {
       width: buttonMinWidth,
       padding: const EdgeInsets.all(buttonPadding),
       decoration: BoxDecoration(
-        color: Colors.green[200],
+        color: Colors.green[500],
         borderRadius: buttonBorderRadius,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.8),
+            spreadRadius: 2,
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Center(
         child: Text(
@@ -97,8 +105,16 @@ class ModeOfCommunication extends StatelessWidget {
                         width: buttonMinWidth,
                         padding: const EdgeInsets.all(buttonPadding),
                         decoration: BoxDecoration(
-                          color: Colors.green[200],
+                          color: Colors.green[500],
                           borderRadius: buttonBorderRadius,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.8),
+                              spreadRadius: 2,
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
                         child: Center(
                           child: Text(
@@ -131,7 +147,6 @@ class ModeOfCommunication extends StatelessWidget {
             ),
           ),
         ),
-        backgroundColor: Colors.green[100],
       ),
     );
   }

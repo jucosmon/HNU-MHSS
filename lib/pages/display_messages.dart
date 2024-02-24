@@ -17,7 +17,7 @@ class _RecentMessagesScreenState extends State<RecentMessagesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Recent Messages'),
-        backgroundColor: const Color.fromARGB(255, 47, 114, 71),
+        backgroundColor: Colors.green[400],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
@@ -51,6 +51,14 @@ class _RecentMessagesScreenState extends State<RecentMessagesScreen> {
                           },
                         );
                       },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(
+                            255, 236, 247, 236), // Background color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        foregroundColor: const Color.fromARGB(255, 5, 82, 23),
+                      ),
                       child: const Text('Message a counselor now!'),
                     ),
                 ],

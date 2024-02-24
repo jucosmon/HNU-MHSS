@@ -16,38 +16,46 @@ Widget createTheBox(BuildContext context, String text, String description,
       Container(
         width: buttonMinWidth,
         padding: const EdgeInsets.all(buttonPadding),
-        decoration: BoxDecoration(
-          color: Colors.green[200],
+        child: Material(
+          elevation: 4, // Add elevation for shadow effect
+          shadowColor: Colors.grey, // Set shadow color
           borderRadius: buttonBorderRadius,
-        ),
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DetailedSuggestionPage(
-                  description: description,
-                  emotion: emotion, userData: userData, // this errors
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailedSuggestionPage(
+                    description: description,
+                    emotion: emotion,
+                    userData: userData,
+                  ),
+                ),
+              );
+            },
+            splashColor:
+                Colors.green[200], // Set the splash color for the hover effect
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.green[500],
+                borderRadius: buttonBorderRadius,
+              ),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10),
+              child: Center(
+                child: Text(
+                  text,
+                  style: GoogleFonts.poppins(
+                    fontSize: 20.0,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            );
-          },
-          child: Column(
-            children: [
-              Text(
-                text,
-                style: GoogleFonts.poppins(
-                  fontSize: 20.0,
-                  // fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ],
+            ),
           ),
         ),
       ),
-      const SizedBox(height: 20),
     ],
   );
 }
@@ -76,7 +84,6 @@ class _SuggestionPageState extends State<SuggestionPage> {
     List<Suggestion> suggestions = getSuggestions(widget.emotion);
 
     return Scaffold(
-      backgroundColor: Colors.green[100],
       appBar: AppBar(
         title: Text(
           'Suggestions',

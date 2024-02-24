@@ -25,12 +25,10 @@ class _StudentHomePageState extends State<StudentHomePage> {
         title: const Center(
           child: Text(
             "HNU-MHSS",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 196, 225, 198)),
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 34, 94, 50),
+        backgroundColor: Colors.green[400],
       ),
       body: _buildBody(context, firstName, lastName),
       backgroundColor: const Color.fromARGB(255, 233, 232, 236),

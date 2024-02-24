@@ -137,7 +137,7 @@ class _EmotionAnalysisState extends State<EmotionAnalysis> {
                   _showResults();
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green[300], // Background color
+                  backgroundColor: Colors.green[600], // Background color
                 ),
                 child: const Text(
                   'See Results',
@@ -149,7 +149,6 @@ class _EmotionAnalysisState extends State<EmotionAnalysis> {
             ],
           ),
         ),
-        backgroundColor: Colors.green[100],
       ),
     );
   }

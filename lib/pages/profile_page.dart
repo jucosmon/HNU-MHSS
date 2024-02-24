@@ -137,12 +137,10 @@ class _ProfilePageState extends State<ProfilePage> {
         title: const Center(
           child: Text(
             "Your Profile",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 196, 225, 198)),
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
           ),
         ),
-        backgroundColor: const Color.fromARGB(255, 34, 94, 50),
+        backgroundColor: Colors.green[400],
         actions: [
           // Three dots icon for options menu
           PopupMenuButton<String>(

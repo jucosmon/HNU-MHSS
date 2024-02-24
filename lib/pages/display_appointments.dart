@@ -17,8 +17,8 @@ class _RecentAppointmentScreenState extends State<RecentAppointmentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Recent Messages'),
-        backgroundColor: const Color.fromARGB(255, 47, 114, 71),
+        title: const Text('Recent Appointments'),
+        backgroundColor: Colors.green[400],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
@@ -52,6 +52,14 @@ class _RecentAppointmentScreenState extends State<RecentAppointmentScreen> {
                           },
                         );
                       },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(
+                            255, 236, 247, 236), // Background color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        foregroundColor: const Color.fromARGB(255, 5, 82, 23),
+                      ),
                       child: const Text('Schedule an appoinment now!'),
                     ),
                 ],
