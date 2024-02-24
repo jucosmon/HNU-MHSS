@@ -2,16 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mentalhealth_support_system/pages/select_counselor.dart';
 
-class RecentMessagesScreen extends StatefulWidget {
+class RecentAppointmentScreen extends StatefulWidget {
   final Map<String, dynamic> userData;
 
-  const RecentMessagesScreen({super.key, required this.userData});
+  const RecentAppointmentScreen({super.key, required this.userData});
 
   @override
-  _RecentMessagesScreenState createState() => _RecentMessagesScreenState();
+  _RecentAppointmentScreenState createState() =>
+      _RecentAppointmentScreenState();
 }
 
-class _RecentMessagesScreenState extends State<RecentMessagesScreen> {
+class _RecentAppointmentScreenState extends State<RecentAppointmentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +22,7 @@ class _RecentMessagesScreenState extends State<RecentMessagesScreen> {
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection('conversations')
+            .collection('appointments')
             .where('participants', arrayContains: widget.userData['userID'])
             .orderBy('timestamp', descending: true)
             .snapshots(),
@@ -37,7 +38,7 @@ class _RecentMessagesScreenState extends State<RecentMessagesScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('No messages yet'),
+                  const Text('No appointment yet'),
                   if (widget.userData['role'] == 'student')
                     ElevatedButton(
                       onPressed: () {
@@ -45,13 +46,13 @@ class _RecentMessagesScreenState extends State<RecentMessagesScreen> {
                           context: context,
                           builder: (BuildContext context) {
                             return CounselorSelectionWidget(
-                              identifier: "message",
+                              identifier: 'appointment',
                               userData: widget.userData,
-                            ); // Display the counselor selection widget
+                            );
                           },
                         );
                       },
-                      child: const Text('Message a counselor now!'),
+                      child: const Text('Schedule an appoinment now!'),
                     ),
                 ],
               ),

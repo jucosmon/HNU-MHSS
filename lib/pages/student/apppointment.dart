@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
 
 class MyAppointment extends StatelessWidget {
+  final String counselorId;
   final Map<String, dynamic> userData;
 
-  const MyAppointment({super.key, required this.userData});
+  const MyAppointment(
+      {super.key, required this.userData, required this.counselorId});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: AppointmentScheduling(
         userData: userData,
+        counselorId: counselorId,
       ),
     );
   }
 }
 
 class AppointmentScheduling extends StatefulWidget {
+  final String counselorId;
   final Map<String, dynamic> userData;
 
-  const AppointmentScheduling({super.key, required this.userData});
+  const AppointmentScheduling(
+      {super.key, required this.userData, required this.counselorId});
   @override
   _StudentHomePage createState() => _StudentHomePage();
 }
@@ -66,7 +71,6 @@ class _StudentHomePage extends State<AppointmentScheduling> {
           ),
         ),
         backgroundColor: Colors.green[400],
-        automaticallyImplyLeading: true,
         actions: [
           // Three-dots icon
           IconButton(

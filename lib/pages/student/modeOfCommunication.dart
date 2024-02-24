@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mentalhealth_support_system/pages/student/apppointment.dart';
+import 'package:mentalhealth_support_system/pages/select_counselor.dart';
 
 const double sizedBoxHeight = 50;
 const double buttonMinWidth = 300.0;
@@ -83,12 +83,15 @@ class ModeOfCommunication extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => MESSAGE NGA PAGE(),
-                        //   ),
-                        // );
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return CounselorSelectionWidget(
+                              identifier: 'message',
+                              userData: userData,
+                            );
+                          },
+                        );
                       },
                       child: Container(
                         width: buttonMinWidth,
@@ -112,13 +115,14 @@ class ModeOfCommunication extends StatelessWidget {
                     ),
                     const SizedBox(height: sizedBoxHeight),
                     buttonModeOfCommunication('Set an appointment', () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AppointmentScheduling(
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CounselorSelectionWidget(
+                            identifier: 'appointment',
                             userData: userData,
-                          ),
-                        ),
+                          );
+                        },
                       );
                     }),
                   ],

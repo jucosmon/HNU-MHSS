@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mentalhealth_support_system/pages/display_appointments.dart';
 import 'package:mentalhealth_support_system/pages/display_messages.dart';
 import 'package:mentalhealth_support_system/pages/profile_page.dart';
-import 'package:mentalhealth_support_system/pages/student/apppointment.dart';
 import 'package:mentalhealth_support_system/services/auth/auth_service.dart';
 import 'package:provider/provider.dart';
 
@@ -83,7 +83,7 @@ class _CounselorHomePageState extends State<CounselorHomePage> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      MyAppointment(userData: widget.userData)),
+                      RecentAppointmentScreen(userData: widget.userData)),
             );
             // Handle navigation for other items if needed
           } else {

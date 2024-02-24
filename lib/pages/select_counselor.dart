@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:mentalhealth_support_system/pages/student/apppointment.dart';
 
 class CounselorSelectionWidget extends StatelessWidget {
-  const CounselorSelectionWidget({super.key});
+  final Map<String, dynamic> userData;
+  final String identifier;
+
+  const CounselorSelectionWidget(
+      {super.key, required this.identifier, required this.userData});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +17,7 @@ class CounselorSelectionWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Choose a Counselor to Message',
+            'Choose a Counselor',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -43,8 +48,7 @@ class CounselorSelectionWidget extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Confirm Selection'),
-          content:
-              const Text('Are you sure you want to message this counselor?'),
+          content: const Text('Are you sure you choose this counselor?'),
           actions: <Widget>[
             TextButton(
               child: const Text('Cancel'),
@@ -57,6 +61,26 @@ class CounselorSelectionWidget extends StatelessWidget {
               onPressed: () {
                 // Return the selected counselor's ID or data
                 Navigator.of(context).pop(counselorId);
+                if (identifier == 'appointment') {
+                  // Navigate to the appointment scheduling page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AppointmentScheduling(
+                        userData: userData,
+                        counselorId: 'counselorId',
+                      ),
+                    ),
+                  );
+                } else {
+                  // Navigate to open a message page
+                  /*
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => OpenMessagePage(userData: userData)),
+                );
+                */
+                }
               },
             ),
           ],
