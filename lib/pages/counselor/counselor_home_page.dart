@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:mentalhealth_support_system/profile_page.dart';
+import 'package:mentalhealth_support_system/pages/display_messages.dart';
+import 'package:mentalhealth_support_system/pages/profile_page.dart';
+import 'package:mentalhealth_support_system/pages/student/apppointment.dart';
 import 'package:mentalhealth_support_system/services/auth/auth_service.dart';
 import 'package:provider/provider.dart';
 
 class CounselorHomePage extends StatefulWidget {
   final Map<String, dynamic> userData;
 
-  const CounselorHomePage({required this.userData});
+  const CounselorHomePage({super.key, required this.userData});
 
   @override
   State<CounselorHomePage> createState() => _CounselorHomePageState();
 }
 
 class _CounselorHomePageState extends State<CounselorHomePage> {
-  int _selectedIndex = 0; // Set the initial selected index to 2 (Profile)
+  final int _selectedIndex = 0; // Set the initial selected index to 2 (Profile)
 
   //sign out
   void signOut() {
@@ -37,11 +39,12 @@ class _CounselorHomePageState extends State<CounselorHomePage> {
                 color: Color.fromARGB(255, 196, 225, 198)),
           ),
         ),
-        backgroundColor: Color.fromARGB(255, 34, 94, 50),
+        backgroundColor: const Color.fromARGB(255, 34, 94, 50),
       ),
       body: _buildBody(context, firstName, lastName),
       backgroundColor: const Color.fromARGB(255, 233, 232, 236),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed, // Set the type to fixed
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.check),
@@ -49,21 +52,39 @@ class _CounselorHomePageState extends State<CounselorHomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.message),
-            label: 'Appointments/Messages',
+            label: 'Messages',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_month),
+            label: 'Appointment',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
         ],
-        backgroundColor: Color.fromARGB(255, 47, 114, 71),
+        backgroundColor: const Color.fromARGB(255, 47, 114, 71),
         selectedItemColor: Colors.white,
-        unselectedItemColor: Color.fromARGB(255, 149, 192, 150),
-        currentIndex: _selectedIndex, // Set the current selected index
+        unselectedItemColor: const Color.fromARGB(255, 149, 192, 150),
+        currentIndex:
+            _selectedIndex, // Set the current selected index Set the current selected index
         onTap: (int index) {
           // Handle navigation based on the tapped index
           if (index == 0) {
           } else if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      RecentMessagesScreen(userData: widget.userData)),
+            );
+          } else if (index == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      MyAppointment(userData: widget.userData)),
+            );
             // Handle navigation for other items if needed
           } else {
             Navigator.push(
