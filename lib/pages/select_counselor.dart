@@ -30,7 +30,7 @@ class CounselorSelectionWidget extends StatelessWidget {
               _showConfirmationDialog(context, counselorId: 'counselor1Id');
             },
             child: const CounselorCard(
-              name: 'John Doe',
+              name: 'Counselor 1',
               profession: 'Licensed Therapist',
               overview:
                   'Experienced in individual and group counseling for various mental health issues.',

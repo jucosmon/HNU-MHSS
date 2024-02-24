@@ -4,36 +4,28 @@ import 'package:mentalhealth_support_system/pages/display_messages.dart';
 import 'package:mentalhealth_support_system/pages/profile_page.dart';
 import 'package:mentalhealth_support_system/pages/student/emotionAnalysis.dart';
 
-class StudentHomePage extends StatefulWidget {
+class StudentHomePage extends StatelessWidget {
   final Map<String, dynamic> userData;
 
   const StudentHomePage({super.key, required this.userData});
 
   @override
-  State<StudentHomePage> createState() => _StudentHomePageState();
-}
-
-class _StudentHomePageState extends State<StudentHomePage> {
-  final int _selectedIndex = 0; // Set the initial selected index to 2 (Profile)
-
-  @override
   Widget build(BuildContext context) {
-    String firstName = widget.userData['first name'] ?? 'Default First Name';
-    String lastName = widget.userData['last name'] ?? 'Default Last Name';
+    String firstName = userData['first name'] ?? 'Default First Name';
+    String lastName = userData['last name'] ?? 'Default Last Name';
     return Scaffold(
       appBar: AppBar(
-        title: const Center(
-          child: Text(
-            "HNU-MHSS",
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-          ),
+        title: const Text(
+          "HNU-MHSS",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
         backgroundColor: Colors.green[400],
+        centerTitle: true,
       ),
-      body: _buildBody(context, firstName, lastName),
+      body: _buildBody(context, firstName),
       backgroundColor: const Color.fromARGB(255, 233, 232, 236),
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed, // Set the type to fixed
+        type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.check),
@@ -44,7 +36,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
             label: 'Messages',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month),
+            icon: Icon(Icons.calendar_today),
             label: 'Appointment',
           ),
           BottomNavigationBarItem(
@@ -52,41 +44,39 @@ class _StudentHomePageState extends State<StudentHomePage> {
             label: 'Profile',
           ),
         ],
-        backgroundColor: const Color.fromARGB(255, 47, 114, 71),
+        backgroundColor: const Color.fromARGB(255, 38, 130, 70),
         selectedItemColor: Colors.white,
         unselectedItemColor: const Color.fromARGB(255, 149, 192, 150),
-        currentIndex:
-            _selectedIndex, // Set the current selected index Set the current selected index
+        currentIndex: 0,
         onTap: (int index) {
-          // Handle navigation based on the tapped index
           if (index == 0) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => EmotionAnalysis(
-                        userData: widget.userData,
-                      )),
+                builder: (context) => EmotionAnalysis(userData: userData),
+              ),
             );
           } else if (index == 1) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      RecentMessagesScreen(userData: widget.userData)),
+                builder: (context) => RecentMessagesScreen(userData: userData),
+              ),
             );
           } else if (index == 2) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      RecentAppointmentScreen(userData: widget.userData)),
+                builder: (context) =>
+                    RecentAppointmentScreen(userData: userData),
+              ),
             );
-            // Handle navigation for other items if needed
           } else {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ProfilePage(userData: widget.userData)),
+                builder: (context) => ProfilePage(userData: userData),
+              ),
             );
           }
         },
@@ -94,33 +84,49 @@ class _StudentHomePageState extends State<StudentHomePage> {
     );
   }
 
-  Widget _buildBody(BuildContext context, String firstName, String lastName) {
-    return SafeArea(
+  Widget _buildBody(BuildContext context, String firstName) {
+    return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding:
-                EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.06),
-            width: double.infinity,
-            child: Center(
-              child: Text(
-                "How are you feeling today $firstName?",
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.black,
-                  fontFamily: 'Arial',
-                ),
+            width: 120,
+            height: 120,
+            decoration: const BoxDecoration(
+              color: Colors.green,
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EmotionAnalysis(userData: userData),
+                  ),
+                );
+              },
+              icon: const Icon(
+                Icons.check,
+                size: 50,
+                color: Colors.white,
               ),
             ),
           ),
-          SizedBox(
-              height: MediaQuery.of(context).size.height *
-                  0.04), // Adjust the spacing as needed
-
           const SizedBox(height: 20),
+          const Text(
+            'Check In',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            "How are you feeling today, $firstName?",
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 20.0,
+              color: Colors.black,
+              fontFamily: 'Arial',
+            ),
+          ),
         ],
       ),
     );

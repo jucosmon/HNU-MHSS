@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mentalhealth_support_system/pages/display_appointments.dart';
 
@@ -85,7 +86,7 @@ class _AppointmentSchedulingState extends State<AppointmentScheduling> {
         ),
         backgroundColor: Colors.green[400],
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(CupertinoIcons.back),
           onPressed: () {
             Navigator.popUntil(context, ModalRoute.withName('/'));
             Navigator.push(
