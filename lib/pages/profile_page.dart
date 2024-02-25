@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -94,22 +95,39 @@ class _ProfilePageState extends State<ProfilePage> {
                 user!.reauthenticateWithCredential(credential).then((_) {
                   // If reauthentication is successful, proceed with account deletion
                   user.delete().then((_) {
-                    Navigator.of(context).pop();
-                    signOut();
-                    AlertDialog(
-                      title: const Text('Account Deleted'),
-                      content: const Text(
-                          'Your account has been deleted successfully.'),
-                      actions: <Widget>[
-                        TextButton(
-                          child: const Text('OK'),
-                          onPressed: () {
-                            // Close the dialog
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    );
+                    // Delete user document from Firestore
+                    FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(user.uid)
+                        .delete()
+                        .then((_) {
+                      Navigator.of(context).pop(); // Close the dialog
+                      signOut();
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Account Deleted'),
+                            content: const Text(
+                                'Your account has been deleted successfully.'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('OK'),
+                                onPressed: () {
+                                  // Close the dialog
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }).catchError((error) {
+                      // Handle Firestore deletion error
+                      Navigator.of(context).pop();
+                      showErrorMessageDialog(
+                          context, "Failed to delete Firestore data");
+                    });
                   }).catchError((error) {
                     // Handle account deletion error
                     Navigator.of(context).pop();
