@@ -39,6 +39,7 @@ dependencies:
   provider:
   cloud_firestore: ^4.15.4
   google_fonts: ^6.1.0
+  email_validator: ^2.1.17
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +73,7 @@ flutter:
     - images/charess2.jpg
     - images/baesuzy3.jpg
     - images/Yae Miko background.png
+    - images/profile_picture.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

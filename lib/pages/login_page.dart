@@ -51,9 +51,9 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     const SizedBox(height: 50),
                     //logo
-                    const Icon(
-                      Icons.message,
-                      size: 100,
+                    Image.asset(
+                      'images/LOGO-min-min.png',
+                      width: 200, // Replace 100 with the desired width
                     ),
                     const SizedBox(height: 50),
 

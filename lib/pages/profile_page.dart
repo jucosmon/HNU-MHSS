@@ -133,6 +133,8 @@ class _ProfilePageState extends State<ProfilePage> {
     String firstName = widget.userData['first name'] ?? 'Default First Name';
     String lastName = widget.userData['last name'] ?? 'Default Last Name';
     String email = widget.userData['email'] ?? 'default email';
+    String role = widget.userData['role'] ?? 'default role';
+
     return Scaffold(
       appBar: AppBar(
         title: const Center(
@@ -178,13 +180,13 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ],
       ),
-      body: _buildBody(context, firstName, lastName, email),
+      body: _buildBody(context, firstName, lastName, email, role),
       backgroundColor: const Color.fromARGB(255, 233, 232, 236),
     );
   }
 
-  Widget _buildBody(
-      BuildContext context, String firstName, String lastName, String email) {
+  Widget _buildBody(BuildContext context, String firstName, String lastName,
+      String email, String role) {
     return SafeArea(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -198,6 +200,7 @@ class _ProfilePageState extends State<ProfilePage> {
           SizedBox(
               height: MediaQuery.of(context).size.height *
                   0.04), // Adjust the spacing as needed
+
           CircleAvatar(
             radius: 70,
             child: ClipOval(
@@ -205,10 +208,23 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: MediaQuery.of(context).size.width / 2,
                 width: MediaQuery.of(context).size.width / 2,
                 child: Image.asset(
-                  'images/charess2.jpg',
+                  'images/profile_picture.jpg',
                   fit: BoxFit.cover,
                 ),
               ),
+            ),
+          ),
+          const SizedBox(height: 10),
+
+          Center(
+            child: Text(
+              role,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 15.0,
+                  color: Colors.black,
+                  fontFamily: GoogleFonts.poppins().fontFamily,
+                  fontWeight: FontWeight.bold),
             ),
           ),
           const SizedBox(height: 20),

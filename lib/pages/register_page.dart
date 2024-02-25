@@ -19,8 +19,18 @@ class _RegisterPageState extends State<RegisterPage> {
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
 
-  //sign up user
+  String? validateEmail(String? value) {
+    if (value != null) {
+      if (!value.endsWith("@hnu.edu.ph")) {
+        return 'Please enter a valid email ending with @hnu.edu.ph';
+      }
+    } else {
+      return 'Please enter an email';
+    }
+    return null;
+  }
 
+  // Sign up user
   void signUp() async {
     if (passwordController.text.trim() !=
         confirmPasswordController.text.trim()) {
@@ -31,7 +41,19 @@ class _RegisterPageState extends State<RegisterPage> {
       );
       return;
     }
-    //get auth service
+
+    // Validate email
+    String? emailValidationResult = validateEmail(emailController.text.trim());
+    if (emailValidationResult != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(emailValidationResult),
+        ),
+      );
+      return;
+    }
+
+    // Get auth service
     final authService = Provider.of<AuthService>(context, listen: false);
 
     try {
@@ -69,55 +91,62 @@ class _RegisterPageState extends State<RegisterPage> {
                   children: [
                     const SizedBox(height: 50),
 
-                    //sign up  message
+                    // Sign up message
                     const Text(
                       "Create an account!",
                       style: TextStyle(fontSize: 25),
                     ),
                     const SizedBox(height: 35),
 
-                    //email textfield
+                    // First name textfield
                     MyTextField(
-                        controller: firstNameController,
-                        hintText: "First Name",
-                        obscureText: false),
+                      controller: firstNameController,
+                      hintText: "First Name",
+                      obscureText: false,
+                    ),
                     const SizedBox(height: 10),
 
+                    // Last name textfield
                     MyTextField(
-                        controller: lastNameController,
-                        hintText: "Last Name",
-                        obscureText: false),
+                      controller: lastNameController,
+                      hintText: "Last Name",
+                      obscureText: false,
+                    ),
                     const SizedBox(height: 10),
 
-                    //email textfield
-                    MyTextField(
-                        controller: emailController,
-                        hintText: "Email",
-                        obscureText: false),
+                    // Email textfield with validation
+                    EmailTextField(
+                      controller: emailController,
+                      hintText: "Email",
+                      obscureText: false,
+                      validator: validateEmail, // Add email validation
+                    ),
                     const SizedBox(height: 10),
 
-                    //password textfield
+                    // Password textfield
                     MyTextField(
-                        controller: passwordController,
-                        hintText: "Password",
-                        obscureText: true),
+                      controller: passwordController,
+                      hintText: "Password",
+                      obscureText: true,
+                    ),
 
                     const SizedBox(height: 10),
 
-                    //password textfield
+                    // Confirm password textfield
                     MyTextField(
-                        controller: confirmPasswordController,
-                        hintText: "Confirm Password",
-                        obscureText: true),
+                      controller: confirmPasswordController,
+                      hintText: "Confirm Password",
+                      obscureText: true,
+                    ),
 
                     const SizedBox(height: 25),
 
-                    //sign in button
+                    // Sign up button
                     MyButton(onTap: signUp, text: "Sign Up"),
 
                     const SizedBox(height: 25),
 
-                    //login in if already have an account
+                    // Login if already have an account
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -141,6 +170,41 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class EmailTextField extends StatelessWidget {
+  final TextEditingController controller;
+  final String hintText;
+  final bool obscureText;
+  final String? Function(String?)? validator;
+
+  const EmailTextField({
+    super.key,
+    required this.controller,
+    required this.hintText,
+    required this.obscureText,
+    this.validator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey.shade200),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.white),
+              borderRadius: BorderRadius.circular(10)),
+          fillColor: Colors.grey[200],
+          filled: true,
+          hintText: hintText,
+          hintStyle: const TextStyle(color: Colors.grey)),
     );
   }
 }
