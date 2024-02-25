@@ -27,14 +27,13 @@ class _OpenMessagePageState extends State<OpenMessagePage> {
           icon:
               const Icon(CupertinoIcons.back), // You can use a custom icon here
           onPressed: () {
-            Navigator.popUntil(context,
-                ModalRoute.withName('/')); // Pop all routes until the main page
-            Navigator.push(
+            Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
                 builder: (context) =>
                     RecentMessagesScreen(userData: widget.userData),
               ),
+              ModalRoute.withName('/'),
             );
           },
         ),

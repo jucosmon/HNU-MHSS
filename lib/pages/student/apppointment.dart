@@ -71,7 +71,14 @@ class _AppointmentSchedulingState extends State<AppointmentScheduling> {
     // Add logic to submit the appointment request with selectedDate, selectedTime, and _notesController.text
     // For example, you can send this information to the backend for further processing
     print('Appointment Confirmed');
-    Navigator.popUntil(context, (route) => route.isFirst);
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            RecentAppointmentScreen(userData: widget.userData),
+      ),
+      ModalRoute.withName('/'),
+    );
   }
 
   @override
