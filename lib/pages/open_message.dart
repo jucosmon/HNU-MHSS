@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mentalhealth_support_system/pages/display_messages.dart';
@@ -17,11 +18,38 @@ class OpenMessagePage extends StatefulWidget {
 }
 
 class _OpenMessagePageState extends State<OpenMessagePage> {
+  Map<String, dynamic>? counselorData;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCounselorData();
+  }
+
+  void fetchCounselorData() async {
+    DocumentSnapshot<Map<String, dynamic>> counselorSnapshot =
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(widget.counselorId)
+            .get();
+
+    if (counselorSnapshot.exists) {
+      setState(() {
+        counselorData = counselorSnapshot.data();
+      });
+    } else {
+      // Handle the case when counselor data is not found
+      print('Counselor not found.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    String name =
+        '${counselorData?['first name'] ?? 'Loading'} ${counselorData?['last name'] ?? '...'}';
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Counselor 1'),
+        title: Text(name),
         backgroundColor: Colors.green[400],
         leading: IconButton(
           icon:

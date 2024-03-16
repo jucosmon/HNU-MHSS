@@ -94,7 +94,7 @@ class CounselorSelectionWidget extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => AppointmentScheduling(
                         userData: userData,
-                        counselorId: 'counselorId',
+                        counselorId: counselorId,
                       ),
                     ),
                   );
@@ -105,7 +105,7 @@ class CounselorSelectionWidget extends StatelessWidget {
                     MaterialPageRoute(
                         builder: (context) => OpenMessagePage(
                               userData: userData,
-                              counselorId: 'counselorId',
+                              counselorId: counselorId,
                             )),
                   );
                 }
