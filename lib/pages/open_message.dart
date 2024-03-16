@@ -64,8 +64,17 @@ class _OpenMessagePageState extends State<OpenMessagePage> {
         }
       }
     } else {
-      // Handle the case when conversation is not found
-      print('Conversation not found.');
+      // Create a new conversation if none exists
+      DocumentReference newConversationRef =
+          await FirebaseFirestore.instance.collection('conversations').add({
+        'participants': [widget.counselorId, widget.userData['uid']],
+        'lastMessage': '', // Set initial lastMessage to an empty string
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+      setState(() {
+        conversationId = newConversationRef.id;
+      });
     }
   }
 
