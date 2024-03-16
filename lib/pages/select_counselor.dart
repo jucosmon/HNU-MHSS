@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mentalhealth_support_system/pages/open_message.dart';
 import 'package:mentalhealth_support_system/pages/student/apppointment.dart';
@@ -25,18 +26,42 @@ class CounselorSelectionWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          GestureDetector(
-            onTap: () {
-              _showConfirmationDialog(context, counselorId: 'counselor1Id');
-            },
-            child: const CounselorCard(
-              name: 'Counselor 1',
-              profession: 'Licensed Therapist',
-              overview:
-                  'Experienced in individual and group counseling for various mental health issues.',
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('users')
+                  .where('role', isEqualTo: 'counselor')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<QueryDocumentSnapshot> counselors =
+                      snapshot.data!.docs.toList();
+                  return ListView.builder(
+                    itemCount: counselors.length,
+                    itemBuilder: (context, index) {
+                      QueryDocumentSnapshot counselor = counselors[index];
+                      return GestureDetector(
+                        onTap: () {
+                          _showConfirmationDialog(context,
+                              counselorId: counselor['uid']);
+                        },
+                        child: CounselorCard(
+                          name:
+                              '${counselor['first name']} ${counselor['last name']}',
+                          profession: counselor['profession'],
+                          overview: counselor['overview'],
+                        ),
+                      );
+                    },
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return const CircularProgressIndicator();
+                }
+              },
             ),
           ),
-          // Add more GestureDetector widgets for additional counselors
         ],
       ),
     );
@@ -129,7 +154,14 @@ class CounselorCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
-            Text(overview),
+            SizedBox(
+              height: 100, // Set a fixed height for the overview
+              child: Text(
+                overview,
+                maxLines: 3, // Limit the number of lines
+                overflow: TextOverflow.ellipsis, // Add ellipsis for overflow
+              ),
+            ),
           ],
         ),
       ),
