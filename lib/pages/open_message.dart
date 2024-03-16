@@ -46,7 +46,7 @@ class _OpenMessagePageState extends State<OpenMessagePage> {
   @override
   Widget build(BuildContext context) {
     String name =
-        '${counselorData?['first name'] ?? 'Loading'} ${counselorData?['last name'] ?? '...'}';
+        '${counselorData?['first name'] ?? 'Loading'} ${counselorData?['last name'] ?? ''}';
     return Scaffold(
       appBar: AppBar(
         title: Text(name),

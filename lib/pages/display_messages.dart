@@ -71,11 +71,11 @@ class _RecentMessagesScreenState extends State<RecentMessagesScreen> {
                 Map<String, dynamic> data =
                     document.data() as Map<String, dynamic>;
                 // Include a check to ensure the current user is a participant in the conversation
-                if (data['participants'].contains(widget.userData['userID'])) {
+                if (data['participants'].contains(widget.userData['uid'])) {
                   return ListTile(
                     title: Text(data['lastMessage']),
                     subtitle: Text(data['participants']
-                        .where((p) => p != widget.userData['userID'])
+                        .where((p) => p != widget.userData['uid'])
                         .toString()),
                   );
                 } else {
@@ -88,6 +88,21 @@ class _RecentMessagesScreenState extends State<RecentMessagesScreen> {
             return const Center(child: Text('No data available'));
           }
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return CounselorSelectionWidget(
+                identifier: "message",
+                userData: widget.userData,
+              ); // Display the counselor selection widget
+            },
+          );
+        },
+        backgroundColor: Colors.green,
+        child: const Icon(Icons.message),
       ),
     );
   }
