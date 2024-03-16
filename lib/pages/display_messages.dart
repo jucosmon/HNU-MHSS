@@ -72,11 +72,38 @@ class _RecentMessagesScreenState extends State<RecentMessagesScreen> {
                     document.data() as Map<String, dynamic>;
                 // Include a check to ensure the current user is a participant in the conversation
                 if (data['participants'].contains(widget.userData['uid'])) {
-                  return ListTile(
-                    title: Text(data['lastMessage']),
-                    subtitle: Text(data['participants']
-                        .where((p) => p != widget.userData['uid'])
-                        .toString()),
+                  String otherParticipantId = data['participants']
+                      .firstWhere((p) => p != widget.userData['uid']);
+                  String firstName =
+                      ""; // Retrieve the first name of the other participant
+                  String lastName =
+                      ""; // Retrieve the last name of the other participant
+                  return FutureBuilder<DocumentSnapshot>(
+                    future: FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(otherParticipantId)
+                        .get(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<DocumentSnapshot> userSnapshot) {
+                      if (userSnapshot.connectionState ==
+                          ConnectionState.done) {
+                        if (userSnapshot.hasData && userSnapshot.data!.exists) {
+                          Map<String, dynamic> userData =
+                              userSnapshot.data!.data() as Map<String, dynamic>;
+                          firstName = userData[
+                              'first name']; // Assign the first name from the user data
+                          lastName = userData[
+                              'last name']; // Assign the last name from the user data
+                        }
+                        return ListTile(
+                          title: Text(data['lastMessage']),
+                          subtitle: Text('$firstName $lastName'),
+                        );
+                      } else {
+                        return const SizedBox
+                            .shrink(); // Hide the message if the current user is not a participant
+                      }
+                    },
                   );
                 } else {
                   return const SizedBox
