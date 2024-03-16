@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mentalhealth_support_system/pages/open_message.dart';
 import 'package:mentalhealth_support_system/pages/select_counselor.dart';
 
 class RecentMessagesScreen extends StatefulWidget {
@@ -22,7 +23,7 @@ class _RecentMessagesScreenState extends State<RecentMessagesScreen> {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('conversations')
-            .where('participants', arrayContains: widget.userData['userID'])
+            .where('participants', arrayContains: widget.userData['uid'])
             .orderBy('timestamp', descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -98,6 +99,18 @@ class _RecentMessagesScreenState extends State<RecentMessagesScreen> {
                         return ListTile(
                           title: Text(data['lastMessage']),
                           subtitle: Text('$firstName $lastName'),
+                          onTap: () {
+                            // Navigate to the open messages screen for the selected conversation
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OpenMessagePage(
+                                  userData: widget.userData,
+                                  counselorId: otherParticipantId,
+                                ),
+                              ),
+                            );
+                          },
                         );
                       } else {
                         return const SizedBox
@@ -116,21 +129,23 @@ class _RecentMessagesScreenState extends State<RecentMessagesScreen> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            builder: (BuildContext context) {
-              return CounselorSelectionWidget(
-                identifier: "message",
-                userData: widget.userData,
-              ); // Display the counselor selection widget
-            },
-          );
-        },
-        backgroundColor: Colors.green,
-        child: const Icon(Icons.message),
-      ),
+      floatingActionButton: widget.userData['role'] == 'student'
+          ? FloatingActionButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CounselorSelectionWidget(
+                      identifier: "message",
+                      userData: widget.userData,
+                    );
+                  },
+                );
+              },
+              backgroundColor: Colors.green,
+              child: const Icon(Icons.message),
+            )
+          : null,
     );
   }
 }
