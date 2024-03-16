@@ -19,11 +19,14 @@ class OpenMessagePage extends StatefulWidget {
 
 class _OpenMessagePageState extends State<OpenMessagePage> {
   Map<String, dynamic>? counselorData;
+  String conversationId =
+      'your_conversation_id'; // Replace with the actual conversation ID
 
   @override
   void initState() {
     super.initState();
     fetchCounselorData();
+    fetchConversationId();
   }
 
   void fetchCounselorData() async {
@@ -43,17 +46,39 @@ class _OpenMessagePageState extends State<OpenMessagePage> {
     }
   }
 
+  void fetchConversationId() async {
+    // Query Firestore to find the conversation ID based on the counselor ID and user ID
+    QuerySnapshot conversationSnapshot = await FirebaseFirestore.instance
+        .collection('conversations')
+        .where('participants', arrayContains: widget.counselorId)
+        .get();
+
+    if (conversationSnapshot.docs.isNotEmpty) {
+      for (QueryDocumentSnapshot conversation in conversationSnapshot.docs) {
+        List<dynamic> participants = conversation['participants'];
+        if (participants.contains(widget.userData['uid'])) {
+          setState(() {
+            conversationId = conversation.id;
+          });
+          break; // Exit the loop once the conversation is found
+        }
+      }
+    } else {
+      // Handle the case when conversation is not found
+      print('Conversation not found.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     String name =
-        '${counselorData?['first name'] ?? 'Loading'} ${counselorData?['last name'] ?? ''}';
+        '${counselorData?['first name'] ?? 'Loading'} ${counselorData?['last name'] ?? '...'}';
     return Scaffold(
       appBar: AppBar(
         title: Text(name),
         backgroundColor: Colors.green[400],
         leading: IconButton(
-          icon:
-              const Icon(CupertinoIcons.back), // You can use a custom icon here
+          icon: const Icon(CupertinoIcons.back),
           onPressed: () {
             Navigator.pushAndRemoveUntil(
               context,
@@ -66,23 +91,45 @@ class _OpenMessagePageState extends State<OpenMessagePage> {
           },
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView(
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('conversations')
+            .doc(conversationId)
+            .collection('messages')
+            .orderBy('timestamp')
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          if (snapshot.hasData) {
+            List<QueryDocumentSnapshot> messages = snapshot.data!.docs;
+            return Column(
               children: [
-                _buildMessage(
-                    isSender: false,
-                    message: 'Hello, how can I help you today?'),
-                _buildMessage(
-                    isSender: true,
-                    message: 'Hi, I need some advice on managing stress.'),
-                // Add more messages here
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: messages.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      Map<String, dynamic> messageData =
+                          messages[index].data() as Map<String, dynamic>;
+                      bool isSender =
+                          messageData['senderId'] == widget.userData['uid'];
+                      String message = messageData['message'];
+                      return _buildMessage(
+                          isSender: isSender, message: message);
+                    },
+                  ),
+                ),
+                _buildInputField(),
               ],
-            ),
-          ),
-          _buildInputField(),
-        ],
+            );
+          } else {
+            return const Center(child: Text('No messages available'));
+          }
+        },
       ),
     );
   }
@@ -106,25 +153,64 @@ class _OpenMessagePageState extends State<OpenMessagePage> {
   }
 
   Widget _buildInputField() {
+    TextEditingController messageController = TextEditingController();
+
+    void sendMessage() async {
+      String message = messageController.text.trim();
+      if (message.isNotEmpty) {
+        // Generate a unique message ID
+        String messageId =
+            FirebaseFirestore.instance.collection('conversations').doc().id;
+
+        // Get the current user ID
+        String userId =
+            widget.userData['uid']; // Retrieve the userId from widget.userData
+
+        // Update the last message and timestamp of the conversation collection
+        await FirebaseFirestore.instance
+            .collection('conversations')
+            .doc(conversationId)
+            .update({
+          'lastMessage': message,
+          'timestamp': FieldValue.serverTimestamp(),
+        });
+
+        // Send the message to Firestore
+        await FirebaseFirestore.instance
+            .collection('conversations')
+            .doc(conversationId)
+            .collection('messages')
+            .doc(messageId)
+            .set({
+          'message': message,
+          'timestamp': FieldValue.serverTimestamp(),
+          'senderId': userId,
+        });
+
+        // Clear the text field after sending the message
+        messageController.clear();
+      }
+    }
+
     return Container(
       padding: const EdgeInsets.all(8.0),
       color: Colors.grey[200],
       child: Row(
         children: [
-          const Expanded(
+          Expanded(
             child: TextField(
-              decoration: InputDecoration(
+              controller: messageController,
+              decoration: const InputDecoration(
                 hintText: 'Type a message...',
                 border: OutlineInputBorder(),
               ),
               // Implement logic to send messages to Firestore
+              onSubmitted: (_) => sendMessage(),
             ),
           ),
           IconButton(
             icon: const Icon(Icons.send),
-            onPressed: () {
-              // Implement logic to send the message to Firestore
-            },
+            onPressed: sendMessage,
           ),
         ],
       ),
